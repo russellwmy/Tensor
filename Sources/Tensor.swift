@@ -1,12 +1,12 @@
+// https://github.com/tensorflow/tensorflow/blob/master/tensorflow/python/framework/ops.py
+
 import Foundation
 
 public struct Tensor {
     public typealias Element = Float
-    
-    public let shape: Shape
+    public let shape: TensorShape
     public private(set) var elements: [Element]
-    
-    public init(shape: Shape, elements: [Element]) {
+    public init(shape: TensorShape, elements: [Element]) {
         let volume = shape.volume
         precondition(elements.count >= volume, "`elements.count` must be greater than or equal to `shape.volume`: elements.count = \(elements.count), shape.volume = \(shape.volume)")
         self.shape = shape
@@ -15,13 +15,13 @@ public struct Tensor {
 }
 
 extension Tensor { // Additional Initializers
-    public init(shape: Shape, element: Element = 0.0) {
+    public init(shape: TensorShape, element: Element = 0.0) {
         self.init(shape: shape, elements: [Element](repeating: element, count: shape.volume))
     }
 }
 
 extension Tensor {
-    public func reshape(shape: Shape) -> Tensor {
+    public func reshape(shape: TensorShape) -> Tensor {
         return Tensor(shape: shape, elements: elements)
     }
 }

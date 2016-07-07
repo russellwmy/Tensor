@@ -66,6 +66,7 @@ extension Tensor {
     public var cbrt: Tensor {
         return Tensor(shape: shape, elements: elements.map(cbrtf))
     }
+    
 }
 
 extension Tensor {
