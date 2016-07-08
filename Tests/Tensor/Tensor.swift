@@ -2,11 +2,13 @@ import XCTest
 @testable import Tensor
 
 class TensorTests: XCTestCase {
-	func testInitTensor () {
+	func testTensor () {
 		let t = Tensor(shape: [2, 3], elements: [1, 2, 3, 4, 5, 6])
 		XCTAssertTrue( t[1, 1] == 5 )
+		
 		let zeros = Tensor(shape: [2, 3])
 		XCTAssertTrue( zeros[1, 1] == 0 )
+		
 		let ones = Tensor(shape: [2, 3], element: 1)
 		XCTAssertTrue( ones[1, 1] == 1 )
 	}
