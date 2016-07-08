@@ -15,9 +15,14 @@ class TensorTests: XCTestCase {
 		let d1 = Dimension(10)
 		let d2 = Dimension(12)
 		XCTAssertTrue( d1 < d2 )
+
 		let s1 = TensorShape( [d1])
 		let s2 = TensorShape( [d2])
 		XCTAssertTrue( s1 != s2 )
+		
+		let d3 = Dimension(12)
+		let s3 = TensorShape( [d3])
+		XCTAssertTrue( s2 == s3 )
 
 	}
 }
