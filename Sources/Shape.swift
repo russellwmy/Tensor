@@ -1,6 +1,6 @@
 // Reference: https://github.com/tensorflow/tensorflow/blob/master/tensorflow/python/framework/tensor_shape.py
 
-public struct TensorShape {
+public struct Shape {
     public let dimensions: [Dimension]
     public var volume: Int {
         return dimensions.reduce(1) { $0 * $1.value }
@@ -10,31 +10,31 @@ public struct TensorShape {
     }
 }
 
-extension TensorShape: ArrayLiteralConvertible {
+extension Shape: ArrayLiteralConvertible {
     public init(arrayLiteral elements: Dimension...) {
         self.init(elements)
     }
 }
 
-extension TensorShape: CustomStringConvertible {
+extension Shape: CustomStringConvertible {
     public var description: String {
         return dimensions.description
     }
 }
 
-extension TensorShape {
+extension Shape {
     public var ndims: Int {
         return dimensions.count
     }
 }
-extension TensorShape {
+extension Shape {
     public var num_elements: Int {
         return dimensions.reduce(0) {$0 + $1.value}
     }
 }
 
-extension TensorShape { 
-    public func merge_with(other: TensorShape) -> TensorShape {
+extension Shape { 
+    public func merge_with(other: Shape) -> Shape {
         if (self.dimensions.count == 0) {
             return other
         } else {
@@ -43,26 +43,26 @@ extension TensorShape {
             for (index, dim) in self.dimensions.enumerated() {
                 new_dims.append(dim.merge_with(other: other.dimensions[index]))
             }
-            return TensorShape(new_dims)
+            return Shape(new_dims)
         }
     }
 }
 
-extension TensorShape { 
-    public func concatenate(other: TensorShape) -> TensorShape {
-        return TensorShape(self.dimensions + other.dimensions)
+extension Shape { 
+    public func concatenate(other: Shape) -> Shape {
+        return Shape(self.dimensions + other.dimensions)
     }
 }
 
-extension TensorShape {
-    public func assert_same_rank(other: TensorShape) {
+extension Shape {
+    public func assert_same_rank(other: Shape) {
         if self.ndims != other.ndims {
             fatalError ("Shapes \(self) and \(other) must have the same rank")
         }
     }
 }
 
-extension TensorShape {
+extension Shape {
     public func assert_has_rank(rank: Int) {
         if self.ndims != rank {
             fatalError ("Shape \(self) must have rank \(rank)")
@@ -70,14 +70,14 @@ extension TensorShape {
     }
 }
 
-extension TensorShape {
-    public func with_rank(rank: Int) -> TensorShape {
-        return self.merge_with(other: TensorShape([Dimension](repeating: Dimension(0), count: rank)))
+extension Shape {
+    public func with_rank(rank: Int) -> Shape {
+        return self.merge_with(other: Shape([Dimension](repeating: Dimension(0), count: rank)))
     }
 }
 
-extension TensorShape {
-    public func with_rank_at_least(rank: Int) -> TensorShape {
+extension Shape {
+    public func with_rank_at_least(rank: Int) -> Shape {
         if self.ndims < rank {
             fatalError ("Shape \(self) must have rank at least \(rank)")
         } else{
@@ -86,8 +86,8 @@ extension TensorShape {
     }
 }
 
-extension TensorShape {
-    public func with_rank_at_most(rank: Int) -> TensorShape{
+extension Shape {
+    public func with_rank_at_most(rank: Int) -> Shape{
         if self.ndims > rank {
             fatalError ("Shape \(self) must have rank at most \(rank)")
         } else{
@@ -96,8 +96,8 @@ extension TensorShape {
     }
 }
 
-extension TensorShape {
-    public func is_compatible_with(other: TensorShape) -> Bool {
+extension Shape {
+    public func is_compatible_with(other: Shape) -> Bool {
         if self.ndims > 0 && other.ndims > 0 {
             if self.ndims != other.ndims {
                 return false
@@ -112,15 +112,15 @@ extension TensorShape {
     }
 }
 
-extension TensorShape {
-    public func assert_is_compatible_with(other: TensorShape) {
+extension Shape {
+    public func assert_is_compatible_with(other: Shape) {
         if !self.is_compatible_with(other: other) {
             fatalError("Shapes \(self) and \(other) are incompatible")
         }
     }
 }
 
-extension TensorShape {
+extension Shape {
     public func is_fully_defined() -> Bool{
         var is_fully_defined = self.dimensions.count > 0;
         for dim in self.dimensions {
@@ -130,7 +130,7 @@ extension TensorShape {
     }
 }
 
-extension TensorShape {
+extension Shape {
     public func assert_is_fully_defined() {
         if !self.is_fully_defined() {
             fatalError("Shapes \(self) is not fully defined")
@@ -139,7 +139,7 @@ extension TensorShape {
 }
 
 
-extension TensorShape: Equatable {}
-public func ==(left: TensorShape, right: TensorShape) -> Bool {
+extension Shape: Equatable {}
+public func ==(left: Shape, right: Shape) -> Bool {
     return left.dimensions == right.dimensions
 }
